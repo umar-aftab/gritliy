@@ -74,7 +74,7 @@ export default function Contact() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Let's Build Your Team
+            Let&apos;s Build Your Team
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Ready to transform your hiring process? Get in touch for a free consultation.

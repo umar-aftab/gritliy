@@ -25,7 +25,7 @@ const defaultTestimonials: Testimonial[] = [
     company: "TechVentures Inc.",
     image: "/testimonials/sarah.jpg",
     rating: 5,
-    text: "Nadeem's approach to technical recruiting is unparalleled. He found us a senior architect who not only had the exact skillset we needed but also became a key culture champion. His understanding of both technical requirements and team dynamics is exceptional.",
+    text: "Nadeem's approach to technical recruiting is unparalleled. He found us a senior architect who not only had the exact skillset we needed but also became a key culture champion. His understanding of both technical requirements and team dynamics is exceptional.&quot;,
     project: "Senior Software Architect",
     date: "2024",
     highlight: "Filled in 2 weeks"
