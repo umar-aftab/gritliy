@@ -1,26 +1,159 @@
 @import "tailwindcss";
 
+/* Dark Theme Variables */
+@theme {
+  --color-bg: #0B0D10;
+  --color-panel: #121418;
+  --color-muted: #1A1D22;
+  --color-text: #E6E8EB;
+  --color-text-muted: #AAB0B6;
+  --color-brand: #4B5563;
+  --color-accent: #8B5CF6;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Dark theme CSS custom properties */
+  --bg: var(--color-bg);
+  --panel: var(--color-panel);
+  --muted: var(--color-muted);
+  --text: var(--color-text);
+  --text-muted: var(--color-text-muted);
+  --brand: var(--color-brand);
+  --accent: var(--color-accent);
+  
+  /* Custom CSS Variables for Clay Colors - PRESERVED */
+  --clay-50: #faf9f7;
+  --clay-100: #f5f3f0;
+  --clay-200: #e8e4de;
+  --clay-300: #d9d3ca;
+  --clay-400: #b8ada0;
+  --clay-500: #968a7b;
+  --clay-600: #7a6d5f;
+  --clay-700: #645950;
+  --clay-800: #544a43;
+  --clay-900: #4A4844;
+  --clay-950: #2a2522;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Apply dark theme by default */
+  background-color: var(--bg);
+  color: var(--text);
+  
+  /* Preserve your font settings */
+  font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom animations - PRESERVED */
+@keyframes gradient {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.animate-gradient {
+  animation: gradient 8s linear infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Dark theme utility classes for Tailwind v4 */
+@utility bg-panel {
+  background-color: var(--panel);
+}
+
+@utility bg-muted {
+  background-color: var(--muted);
+}
+
+@utility text-muted {
+  color: var(--text-muted);
+}
+
+@utility border-divider {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Custom utility classes - PRESERVED */
+.bg-clay-50 { background-color: var(--clay-50); }
+.bg-clay-100 { background-color: var(--clay-100); }
+.bg-clay-200 { background-color: var(--clay-200); }
+.bg-clay-300 { background-color: var(--clay-300); }
+.bg-clay-400 { background-color: var(--clay-400); }
+.bg-clay-500 { background-color: var(--clay-500); }
+.bg-clay-600 { background-color: var(--clay-600); }
+.bg-clay-700 { background-color: var(--clay-700); }
+.bg-clay-800 { background-color: var(--clay-800); }
+.bg-clay-900 { background-color: var(--clay-900); }
+
+.text-clay-50 { color: var(--clay-50); }
+.text-clay-100 { color: var(--clay-100); }
+.text-clay-200 { color: var(--clay-200); }
+.text-clay-300 { color: var(--clay-300); }
+.text-clay-400 { color: var(--clay-400); }
+.text-clay-500 { color: var(--clay-500); }
+.text-clay-600 { color: var(--clay-600); }
+.text-clay-700 { color: var(--clay-700); }
+.text-clay-800 { color: var(--clay-800); }
+.text-clay-900 { color: var(--clay-900); }
+
+.border-clay-100 { border-color: var(--clay-100); }
+.border-clay-200 { border-color: var(--clay-200); }
+.border-clay-300 { border-color: var(--clay-300); }
+.border-clay-500 { border-color: var(--clay-500); }
+
+.from-clay-50 { --tw-gradient-from: var(--clay-50); }
+.from-clay-100 { --tw-gradient-from: var(--clay-100); }
+.from-clay-500 { --tw-gradient-from: var(--clay-500); }
+.from-clay-700 { --tw-gradient-from: var(--clay-700); }
+.from-clay-900 { --tw-gradient-from: var(--clay-900); }
+
+.to-clay-50 { --tw-gradient-to: var(--clay-50); }
+.to-clay-100 { --tw-gradient-to: var(--clay-100); }
+.to-clay-200 { --tw-gradient-to: var(--clay-200); }
+.to-clay-600 { --tw-gradient-to: var(--clay-600); }
+.to-clay-700 { --tw-gradient-to: var(--clay-700); }
+.to-clay-900 { --tw-gradient-to: var(--clay-900); }
+
+.via-clay-800 { --tw-gradient-via: var(--clay-800); }
+
+.ring-clay-500 { --tw-ring-color: var(--clay-500); }
+.focus\:ring-clay-500:focus { --tw-ring-color: var(--clay-500); }
+
+.hover\:bg-clay-50:hover { background-color: var(--clay-50); }
+.hover\:bg-clay-800:hover { background-color: var(--clay-800); }
+.hover\:bg-clay-900:hover { background-color: var(--clay-900); }
+.hover\:text-clay-700:hover { color: var(--clay-700); }
+.hover\:text-clay-900:hover { color: var(--clay-900); }
+
+/* Glass morphism - PRESERVED but updated for dark theme */
+.glass {
+  background: rgba(18, 20, 24, 0.8); /* Using panel color with transparency */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Dark glass variant */
+.glass-dark {
+  background: rgba(26, 29, 34, 0.8); /* Using muted color with transparency */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
