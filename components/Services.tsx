@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Users, Target, Rocket, Brain, Database, Zap } from "lucide-react";
+import { Users, Brain, Database } from "lucide-react";
 
 const services = [
   {

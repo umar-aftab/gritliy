@@ -103,8 +103,8 @@ export default function CaseStudy() {
               </div>
 
               <blockquote className="border-l-4 border-clay-600 pl-4 italic text-gray-700">
-                "Nadeem didn't just fill positions he understood our technical challenges and found engineers who became instrumental in our FDA approval. 
-                The quality of candidates was exceptional."
+                {`"Nadeem didn't just fill positions he understood our technical challenges and found engineers who became instrumental in our FDA approval. 
+                The quality of candidates was exceptional."`}
                 <footer className="mt-2 text-sm font-semibold text-gray-900">
                   — Dr. Sarah Chen, CTO
                 </footer>

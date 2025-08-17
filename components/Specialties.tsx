@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Brain, Cpu, Database, Zap, Cloud, Target, Rocket, Bot } from "lucide-react";
+import { Cpu, Zap, Target, Rocket, Bot } from "lucide-react";
 
 const specialties = [
   { icon: Bot, title: "Autonomous & Robotics", color: "from-purple-500 to-purple-700" },

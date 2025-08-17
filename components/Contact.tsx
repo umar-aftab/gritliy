@@ -266,7 +266,7 @@ export default function Contact() {
                   <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
                   <div>
                     <p className="text-sm font-medium text-green-800">Message sent successfully!</p>
-                    <p className="text-sm text-green-600 mt-1">We'll get back to you within 24 hours.</p>
+                    <p className="text-sm text-green-600 mt-1">{`We'll get back to you within 24 hours.`}</p>
                   </div>
                 </motion.div>
               )}

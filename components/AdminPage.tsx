@@ -192,7 +192,7 @@ export default function AdminPage() {
             <div className="p-6">
                 {testimonials.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
-                    No testimonials yet. Click "Add Testimonial" to get started.
+                    {`No testimonials yet. Click "Add Testimonial" to get started.`}
                 </div>
                 ) : (
                 <div className="grid gap-4">
@@ -222,7 +222,7 @@ export default function AdminPage() {
                             </div>
                             
                             <p className="text-gray-700 mb-4 line-clamp-3">
-                            "{testimonial.text}"
+                            {`"${testimonial.text}"`}
                             </p>
                             
                             <div className="flex flex-wrap gap-2 mb-3">
