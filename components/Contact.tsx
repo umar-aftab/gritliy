@@ -164,7 +164,7 @@ export default function Contact() {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-800 rounded-lg focus:ring-2 focus:ring-clay-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 border border-gray-800 text-gray-700 rounded-lg focus:ring-2 focus:ring-clay-500 focus:border-transparent outline-none transition-all"
                     disabled={isSubmitting}
                   />
                 </div>
@@ -179,7 +179,7 @@ export default function Contact() {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-800 rounded-lg focus:ring-2 focus:ring-clay-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 border border-gray-800 text-gray-700 rounded-lg focus:ring-2 focus:ring-clay-500 focus:border-transparent outline-none transition-all"
                     disabled={isSubmitting}
                   />
                 </div>
@@ -197,7 +197,7 @@ export default function Contact() {
                     required
                     value={formData.company}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-800 rounded-lg focus:ring-2 focus:ring-clay-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 border border-gray-800 text-gray-700 rounded-lg focus:ring-2 focus:ring-clay-500 focus:border-transparent outline-none transition-all"
                     disabled={isSubmitting}
                   />
                 </div>
@@ -211,7 +211,7 @@ export default function Contact() {
                     required
                     value={formData.role}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-800 rounded-lg focus:ring-2 focus:ring-clay-500 focus:border-transparent outline-none transition-all text-gray-800 invalid:text-gray-800"
+                    className="w-full px-4 py-3 border border-gray-800 text-gray-700 rounded-lg focus:ring-2 focus:ring-clay-500 focus:border-transparent outline-none transition-all text-gray-800 invalid:text-gray-800"
                     disabled={isSubmitting}
                   >
                     <option value="" className="bg-white text-gray-700">Select a role type</option>
