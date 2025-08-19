@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Verify session endpoint
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const cookieStore = await cookies();
     const sessionToken = cookieStore.get('admin-session')?.value;
