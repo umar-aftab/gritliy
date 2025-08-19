@@ -227,16 +227,17 @@ export async function POST(request: NextRequest) {
       { message: 'Email sent successfully' },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error sending email:', error);
     
     // Log more details in development
     if (process.env.NODE_ENV === 'development') {
-      console.error('Error details:', {
-        message: error.message,
-        code: error.code,
-        statusCode: error.statusCode,
-        requestId: error.requestId
+        const errorDetails = error as { message?: string; code?: string; statusCode?: number; requestId?: string };
+        console.error('Error details:', {
+        message: errorDetails.message,
+        code: errorDetails.code,
+        statusCode: errorDetails.statusCode,
+        requestId: errorDetails.requestId
       });
     }
     
