@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export default function TechnologyStack() {
   const technologies = [
@@ -74,10 +75,12 @@ export default function TechnologyStack() {
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.6 }}
                 >
-                  <img 
+                  <Image 
                     src={tech.src} 
                     alt={tech.name}
-                    className="w-12 h-12 object-contain"
+                    width={50}
+                    height={50}
+                    className="object-contain"
                   />
                 </motion.div>
                 
