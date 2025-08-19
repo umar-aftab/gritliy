@@ -1,15 +1,14 @@
-
-// app/api/auth/logout/route.ts
-import { NextResponse } from 'next/server';
+//app/api/auth/logout/route.ts
+import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
     const cookieStore = await cookies();
-    
+
     // Clear the session cookie
     cookieStore.delete('admin-session');
-    
+
     return NextResponse.json(
       { success: true },
       { status: 200 }
@@ -22,3 +21,4 @@ export async function POST() {
     );
   }
 }
+

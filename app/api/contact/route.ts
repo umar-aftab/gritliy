@@ -227,22 +227,16 @@ export async function POST(request: NextRequest) {
       { message: 'Email sent successfully' },
       { status: 200 }
     );
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error('Error sending email:', error);
-    
-    // Type-safe error handling
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    const errorCode = error && typeof error === 'object' && 'code' in error ? error.code : undefined;
-    const statusCode = error && typeof error === 'object' && 'statusCode' in error ? error.statusCode : undefined;
-    const requestId = error && typeof error === 'object' && 'requestId' in error ? error.requestId : undefined;
     
     // Log more details in development
     if (process.env.NODE_ENV === 'development') {
       console.error('Error details:', {
-        message: errorMessage,
-        code: errorCode,
-        statusCode: statusCode,
-        requestId: requestId
+        message: error.message,
+        code: error.code,
+        statusCode: error.statusCode,
+        requestId: error.requestId
       });
     }
     

@@ -5,7 +5,7 @@ import crypto from 'crypto';
 
 // Store these in environment variables
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@gritliy.com';
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH; // You'll need to generate this
+const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH; 
 
 // Helper function to hash passwords
 function hashPassword(password: string): string {
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Verify session endpoint
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies();
     const sessionToken = cookieStore.get('admin-session')?.value;

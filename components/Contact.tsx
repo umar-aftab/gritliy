@@ -49,7 +49,7 @@ export default function Contact() {
         setSubmitStatus('error');
         setErrorMessage(data.error || 'Failed to send message. Please try again.');
       }
-    } catch {
+    } catch (error) {
       setSubmitStatus('error');
       setErrorMessage('Network error. Please check your connection and try again.');
     } finally {
@@ -301,4 +301,3 @@ export default function Contact() {
     </section>
   );
 }
-
