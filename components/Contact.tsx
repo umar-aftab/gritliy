@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Linkedin, Send, CheckCircle, AlertCircle } from "lucide-react";
+import { Mail, MapPin, Linkedin, Send, CheckCircle, AlertCircle } from "lucide-react";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -120,7 +120,7 @@ export default function Contact() {
                 </motion.div>
 
                 <motion.a
-                  href="https://linkedin.com/in/nadeemshaykh"
+                  href="https://www.linkedin.com/in/nadz1/"
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ x: 5 }}
@@ -137,10 +137,9 @@ export default function Contact() {
               </div>
 
               <div className="mt-8 pt-8 border-t border-white/20">
-                <h4 className="font-semibold mb-3">Office Hours</h4>
+                <h4 className="font-semibold mb-3">TEAM</h4>
                 <p className="text-gray-300">
-                  Monday - Friday: 8:00 AM - 6:00 PM MST<br />
-                  Available for calls across all time zones
+                 Let us build your team !
                 </p>
               </div>
             </div>

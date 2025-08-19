@@ -28,7 +28,7 @@ export default function About() {
               Nadeem Shaikh
             </h3>
             <p className="text-lg text-gray-400">
-              Founder & Lead Technical Recruiter
+              Founder
             </p>
             
             <div className="prose prose-lg bg-[--bg]">
@@ -37,7 +37,7 @@ export default function About() {
               </p>
               <p>
                 Specializing in Autonomous & Robotics, Deep Technology, Space Research & Technology, AI Hardware & Semi-conductors and NeuroTech, Nadeem has successfully placed hundreds of engineers at companies ranging from stealth startups to Fortune 500 enterprises.<br></br>
-                Nadeem has successfully placed engineers at startups from Seed to Series C funding stages and at Fortune 500 enterprises
+                Nadeem has successfully placed engineers at startups from Seed to Series-C funding stages and at Fortune 500 enterprises.
               </p>
             </div>
 
@@ -94,7 +94,7 @@ export default function About() {
               <div className="grid grid-cols-2 gap-6">
                 <div className="bg-white/10 backdrop-blur-md rounded-lg p-4 text-center border border-white/20">
                   <div className="text-2xl font-bold text-white mb-1">100+</div>
-                  <div className="text-xs text-white/80">Engineers Placed</div>
+                  <div className="text-xs text-white/80">Hard-to-fill roles</div>
                 </div>
                 <div className="bg-white/10 backdrop-blur-md rounded-lg p-4 text-center border border-white/20">
                   <div className="text-2xl font-bold text-white mb-1">95%</div>

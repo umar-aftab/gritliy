@@ -6,7 +6,7 @@ import { Users, Brain, Database } from "lucide-react";
 const services = [
   {
     icon: Users,
-    title: "Technical Recruiting",
+    title: "Strategic Talent Sourcing",
     description: "Expert sourcing and evaluation of top-tier engineering talent across all technical disciplines.",
   },
  
@@ -18,7 +18,7 @@ const services = [
 
    {
     icon: Brain,
-    title: "Specialized Recruiting",
+    title: "Embedded Recruiting",
     description: "Building world-class engineering teams through intelligent scouting and human expertise",
   },
 ];

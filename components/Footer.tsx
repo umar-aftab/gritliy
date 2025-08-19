@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Logo from "./Logo";
-import { Mail, Phone, Linkedin, ArrowUp } from "lucide-react";
+import { Mail, Linkedin, ArrowUp } from "lucide-react";
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -72,7 +72,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://linkedin.com/in/nadeemshaykh"
+                  href="https://www.linkedin.com/in/nadz1/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 hover:text-white transition-colors"
@@ -85,14 +85,23 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+        <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-400 text-sm">
             © {new Date().getFullYear()} GRITLIY. All rights reserved.
           </p>
-          
+
+          <a
+            href="https://www.iron-ai.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 text-sm hover:text-white transition-colors mt-1 md:mt-0"
+          >
+            Developed and sculpted by <span className="underline underline-offset-4">Iron AI</span>
+          </a>
+
           <button
             onClick={scrollToTop}
-            className="mt-4 md:mt-0 flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+            className="mt-1 md:mt-0 flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
           >
             Back to top
             <ArrowUp className="w-4 h-4" />

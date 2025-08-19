@@ -13,7 +13,7 @@ const stats = [
   {
     icon: Users,
     number: "100+",
-    label: "Engineers Placed",
+    label: "hard-to-fill roles",
     description: "across all technical disciplines",
   },
   {

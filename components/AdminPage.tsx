@@ -226,11 +226,11 @@ export default function AdminPage() {
                             </p>
                             
                             <div className="flex flex-wrap gap-2 mb-3">
-                            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 rounded text-sm">
+                            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm">
                                 <Briefcase className="w-3 h-3" />
                                 {testimonial.project}
                             </span>
-                            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 rounded text-sm">
+                            <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded text-sm">
                                 <Calendar className="w-3 h-3" />
                                 {testimonial.date}
                             </span>
@@ -380,11 +380,11 @@ export default function AdminPage() {
                     <select
                     value={formData.rating}
                     onChange={(e) => handleInputChange('rating', parseInt(e.target.value))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent bg-white text-gray-700"
                     >
-                    <option value={5}>5 Stars</option>
-                    <option value={4}>4 Stars</option>
-                    <option value={3}>3 Stars</option>
+                    <option value={5} className="bg-white text-gray-700">5 Stars</option>
+                    <option value={4} className="bg-white text-gray-700">4 Stars</option>
+                    <option value={3} className="bg-white text-gray-700">3 Stars</option>
                     </select>
                 </div>
 
