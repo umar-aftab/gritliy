@@ -102,7 +102,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <div className="text-sm text-gray-400">Email</div>
-                    <div className="text-lg">nadeem@gritliy.com</div>
+                    <div className="text-lg">umar@gritliy.com</div>
                   </div>
                 </motion.a>
 
@@ -120,7 +120,7 @@ export default function Contact() {
                 </motion.div>
 
                 <motion.a
-                  href="https://www.linkedin.com/in/nadz1/"
+                  href="https://www.linkedin.com/in/umaraftab/"
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ x: 5 }}
@@ -131,7 +131,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <div className="text-sm text-gray-400">LinkedIn</div>
-                    <div className="text-lg">Connect with Nadeem</div>
+                    <div className="text-lg">Connect with Umar</div>
                   </div>
                 </motion.a>
               </div>

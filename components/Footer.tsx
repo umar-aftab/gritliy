@@ -67,12 +67,12 @@ export default function Footer() {
               <li>
                 <a href="mailto:info@gritliy.com" className="flex items-center gap-2 hover:text-white transition-colors">
                   <Mail className="w-4 h-4" />
-                  nadeem@gritliy.com
+                  umar@gritliy.com
                 </a>
               </li>
               <li>
                 <a
-                  href="https://www.linkedin.com/in/nadz1/"
+                  href="https://www.linkedin.com/in/umaraftab/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 hover:text-white transition-colors"

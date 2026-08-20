@@ -51,32 +51,32 @@ export default function AdminPage() {
       setTestimonials(JSON.parse(stored));
     } else {
       // Default testimonials if none exist
-      const defaultTestimonials = [
-        {
-          id: 1,
-          name: "Sarah Chen",
-          role: "VP of Engineering",
-          company: "TechVentures Inc.",
-          image: "/testimonials/sarah.jpg",
-          rating: 5,
-          text: "Nadeem's approach to technical recruiting is unparalleled. He found us a senior architect who not only had the exact skillset we needed but also became a key culture champion. His understanding of both technical requirements and team dynamics is exceptional.",
-          project: "Senior Software Architect",
-          date: "2024",
-          highlight: "Filled in 2 weeks"
-        },
-        {
-          id: 2,
-          name: "Marcus Rodriguez",
-          role: "CTO & Co-founder",
-          company: "AI Dynamics",
-          image: "/testimonials/marcus.jpg",
-          rating: 5,
-          text: "Working with Nadeem transformed our hiring process. He sourced ML engineers from companies we hadn't even considered, and his screening saved us countless hours. Three of our best engineers came through his pipeline.",
-          project: "ML Engineering Team",
-          date: "2024",
-          highlight: "3 successful hires"
-        }
-      ];
+    const defaultTestimonials = [
+      {
+        id: 1,
+        name: "Nicholas Polimeni",
+        role: "Software Engineer",
+        company: "Together AI",
+        image: "/testimonials/nicholas-polimeni.jpg",
+        rating: 5,
+        text: "Umar is an excellent and kind recruiter! He worked diligently to identify roles where I was a good match. Umar always kept a positive and supportive attitude, securing me multiple interviews at promising companies. I highly recommend working with Umar as a job seeker or as a startup seeking talent.",
+        project: "Technical Recruitment",
+        date: "March 2026",
+        highlight: "Multiple interviews secured"
+      },
+      {
+        id: 2,
+        name: "Ahmad Tamimi",
+        role: "Co-Founder",
+        company: "Pennix.ai & Perryx.ai",
+        image: "/testimonials/ahmad-tamimi.jpg",
+        rating: 5,
+        text: "I found Umar to be consistently pleasant, tackling all assignments with dedication and a smile. Besides being a joy to work with, Umar is a take-charge person who is able to present creative ideas and communicate their benefits. He successfully developed several websites for key clients and participated in the development of enterprise-level web applications for 3mushrooms.",
+        project: "Software Development",
+        date: "November 2011",
+        highlight: "Enterprise application experience"
+      }
+    ];
       setTestimonials(defaultTestimonials);
       localStorage.setItem('testimonials', JSON.stringify(defaultTestimonials));
     }

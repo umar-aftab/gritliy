@@ -136,9 +136,9 @@ export async function POST(request: NextRequest) {
           <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 30px 0;">
             <p style="color: #555; margin: 0 0 15px 0; font-weight: bold;">In the meantime, feel free to:</p>
             <ul style="line-height: 1.8; color: #666;">
-              <li>Connect with me on <a href="https://linkedin.com/in/nadeemshaykh" style="color: #4A4844; font-weight: bold;">LinkedIn</a></li>
+              <li>Connect with me on <a href="https://www.linkedin.com/in/umaraftab/" style="color: #4A4844; font-weight: bold;">LinkedIn</a></li>
               <li>Visit our website: <a href="https://gritliy.com" style="color: #4A4844; font-weight: bold;">gritliy.com</a></li>
-              <li>Schedule a call directly: <a href="mailto:nadeem@gritliy.com" style="color: #4A4844; font-weight: bold;">nadeem@gritliy.com</a></li>
+              <li>Schedule a call directly: <a href="mailto:umar@gritliy.com" style="color: #4A4844; font-weight: bold;">nadeem@gritliy.com</a></li>
             </ul>
           </div>
         </div>
@@ -148,16 +148,16 @@ export async function POST(request: NextRequest) {
             <tr>
               <td style="text-align: left;">
                 <p style="color: #666; font-size: 14px; line-height: 1.6; margin: 0;">
-                  <strong>Nadeem Shaikh</strong><br>
-                  Founder & Lead Technical Recruiter<br>
+                  <strong>Umar Aftab</strong><br>
+                  Founder & Technical Recruiter<br>
                   GRITLIY<br>
                   Calgary, Alberta
                 </p>
               </td>
               <td style="text-align: right; vertical-align: top;">
                 <p style="color: #666; font-size: 14px; margin: 0;">
-                  <a href="https://linkedin.com/in/nadeemshaykh" style="color: #4A4844;">LinkedIn</a> | 
-                  <a href="mailto:nadeem@gritliy.com" style="color: #4A4844;">Email</a>
+                  <a href="https://www.linkedin.com/in/umaraftab/" style="color: #4A4844;">LinkedIn</a> | 
+                  <a href="mailto:umar@gritliy.com" style="color: #4A4844;">Email</a>
                 </p>
               </td>
             </tr>
@@ -177,7 +177,7 @@ export async function POST(request: NextRequest) {
         toRecipients: [
           {
             emailAddress: {
-              address: 'nadeem@gritliy.com'
+              address: 'umar@gritliy.com'
             }
           }
         ],
@@ -211,8 +211,8 @@ export async function POST(request: NextRequest) {
         ],
         from: {
           emailAddress: {
-            address: 'nadeem@gritliy.com',
-            name: 'Nadeem Shaikh - GRITLIY'
+            address: 'umar@gritliy.com',
+            name: 'Umar Aftab - GRITLIY'
           }
         }
       },
@@ -220,8 +220,8 @@ export async function POST(request: NextRequest) {
     };
 
     // Send both emails using Microsoft Graph
-    await client.api('/users/nadeem@gritliy.com/sendMail').post(adminEmail);
-    await client.api('/users/nadeem@gritliy.com/sendMail').post(autoReplyEmail);
+    await client.api('/users/umar@gritliy.com/sendMail').post(adminEmail);
+    await client.api('/users/umar@gritliy.com/sendMail').post(autoReplyEmail);
 
     return NextResponse.json(
       { message: 'Email sent successfully' },
