@@ -5,6 +5,7 @@ import Testimonials from "@/components/Testimonials";
 import Specialties from "@/components/Specialties";
 import Stats from "@/components/Stats";
 import TechnologyStack from "@/components/TechnologyStack";
+import CaseStudy from "@/components/CaseStudy";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
@@ -18,6 +19,7 @@ export default function Home() {
         <Services />
         <Specialties />
         <About />
+        <CaseStudy />
         <Testimonials />
         <Stats />
         <TechnologyStack />
