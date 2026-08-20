@@ -136,7 +136,7 @@ export default function About() {
             
             <div className="absolute top-4 right-4">
               <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center">
-                <span className="text-white font-bold text-lg">NS</span>
+                <span className="text-white font-bold text-lg">UA</span>
               </div>
             </div>
           </motion.div>

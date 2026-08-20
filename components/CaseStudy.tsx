@@ -133,7 +133,7 @@ export default function CaseStudy() {
 
                 <div className="bg-[--bg]/80 backdrop-blur p-4 rounded-xl">
                   <TrendingUp className="w-8 h-8 text-clay-600 mb-2" />
-                  <div className="text-2xl font-bold text-gray-900">2</div>
+                  <div className="text-2xl font-bold text-gray-900">6</div>
                   <div className="text-sm text-gray-600">
                     Reached Mid-Round
                   </div>
