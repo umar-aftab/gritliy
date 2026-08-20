@@ -39,7 +39,7 @@ rl.question('Enter admin email (default: admin@gritliy.com): ', (email) => {
     console.log('EMAIL_HOST=smtp.office365.com');
     console.log('EMAIL_PORT=587');
     console.log('EMAIL_SECURE=false');
-    console.log('EMAIL_USER=nadeem@gritliy.com');
+    console.log('EMAIL_USER=umar@gritliy.com');
     console.log('EMAIL_PASS=YOUR_EMAIL_PASSWORD_HERE');
     console.log('\n=================================');
     console.log('Setup complete!');

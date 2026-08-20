@@ -93,7 +93,7 @@ export default function Contact() {
               
               <div className="space-y-6">
                 <motion.a
-                  href="mailto:nadeem@gritliy.com"
+                  href="mailto:umar@gritliy.com"
                   whileHover={{ x: 5 }}
                   className="flex items-center gap-4 group"
                 >
