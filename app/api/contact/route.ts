@@ -138,7 +138,7 @@ export async function POST(request: NextRequest) {
             <ul style="line-height: 1.8; color: #666;">
               <li>Connect with me on <a href="https://www.linkedin.com/in/umaraftab/" style="color: #4A4844; font-weight: bold;">LinkedIn</a></li>
               <li>Visit our website: <a href="https://gritliy.com" style="color: #4A4844; font-weight: bold;">gritliy.com</a></li>
-              <li>Schedule a call directly: <a href="mailto:umar@gritliy.com" style="color: #4A4844; font-weight: bold;">nadeem@gritliy.com</a></li>
+              <li>Schedule a call directly: <a href="mailto:umar@gritliy.com" style="color: #4A4844; font-weight: bold;">umar@gritliy.com</a></li>
             </ul>
           </div>
         </div>

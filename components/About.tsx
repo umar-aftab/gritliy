@@ -74,7 +74,7 @@ export default function About() {
           >
             <iframe
               src="https://www.youtube.com/embed/eza-l-kBK40"
-              title="Nadeem Introduction Video"
+              title="Umar Introduction Video"
               className="absolute inset-0 w-full h-full"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
