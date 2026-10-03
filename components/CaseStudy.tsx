@@ -117,7 +117,7 @@ export default function CaseStudy() {
               <div className="grid grid-cols-2 gap-6 mb-8">
                 <div className="bg-[--bg]/80 backdrop-blur p-4 rounded-xl">
                   <Users className="w-8 h-8 text-clay-600 mb-2" />
-                  <div className="text-2xl font-bold text-gray-900">23</div>
+                  <div className="text-2xl font-bold text-gray-900">30</div>
                   <div className="text-sm text-gray-600">
                     Candidates Submitted
                   </div>
@@ -125,7 +125,7 @@ export default function CaseStudy() {
 
                 <div className="bg-[--bg]/80 backdrop-blur p-4 rounded-xl">
                   <Calendar className="w-8 h-8 text-clay-600 mb-2" />
-                  <div className="text-2xl font-bold text-gray-900">11</div>
+                  <div className="text-2xl font-bold text-gray-900">24</div>
                   <div className="text-sm text-gray-600">
                     Interviews Generated
                   </div>
@@ -133,7 +133,7 @@ export default function CaseStudy() {
 
                 <div className="bg-[--bg]/80 backdrop-blur p-4 rounded-xl">
                   <TrendingUp className="w-8 h-8 text-clay-600 mb-2" />
-                  <div className="text-2xl font-bold text-gray-900">6</div>
+                  <div className="text-2xl font-bold text-gray-900">8</div>
                   <div className="text-sm text-gray-600">
                     Reached Mid-Round
                   </div>
@@ -141,7 +141,7 @@ export default function CaseStudy() {
 
                 <div className="bg-[--bg]/80 backdrop-blur p-4 rounded-xl">
                   <CheckCircle className="w-8 h-8 text-clay-600 mb-2" />
-                  <div className="text-2xl font-bold text-gray-900">1</div>
+                  <div className="text-2xl font-bold text-gray-900">2</div>
                   <div className="text-sm text-gray-600">
                     Reached Final Round
                   </div>

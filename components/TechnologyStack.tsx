@@ -1,121 +1,127 @@
 "use client";
-import React from 'react';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
 
-export default function TechnologyStack() {
-  const technologies = [
-   {
-        name: "hireEZ",
-        src: "/hireez.jpg",
-        category: "AI Recruiting Platform",
-        description:
-        "AI-first, people-centric recruiting platform (formerly Hiretual) for sourcing, engagement, and talent CRM.",
-    },
-    {
-        name: "lemlist",
-        src: "/lemlist.jpg",
-        category: "Outbound & Outreach",
-        description:
-        "Prospecting tool to automate multichannel outreach (email, LinkedIn, calls) and boost reply rates.",
-    },
-    {
-        name: "Lusha",
-        src: "/lusha.jpg",
-        category: "Sales Intelligence",
-        description:
-        "B2B data & AI sales intelligence—direct dials, emails, intent, and enrichment for go-to-market teams.",
-    },
-    {
-        name: "Apollo.io",
-        src: "/apollo.jpg",
-        category: "Sales Engagement / Outbound",
-        description:
-        "AI outbound engine with database, sequences, inbox, and analytics for B2B sales teams.",
-    },
-    {
-        name: "Juicebox (PeopleGPT)",
-        src: "/juicebox.jpg",
-        category: "People Search / Talent Intelligence",
-        description:
-        "AI-powered people search (PeopleGPT) to find and reason about candidates and contacts.",
-    },
-  ];
+import { motion } from "framer-motion";
+import {
+  ClipboardCheck,
+  MessagesSquare,
+  Network,
+  SearchCheck,
+} from "lucide-react";
 
+const processSteps = [
+  {
+    number: "01",
+    icon: ClipboardCheck,
+    title: "Calibrate the Search",
+    description:
+      "Define the scientific background, software experience, customer responsibilities and commercial outcomes required from the hire.",
+  },
+  {
+    number: "02",
+    icon: Network,
+    title: "Map the Talent Market",
+    description:
+      "Identify relevant R&D software companies, adjacent platforms and specialized talent pools across the agreed locations.",
+  },
+  {
+    number: "03",
+    icon: SearchCheck,
+    title: "Evaluate the Evidence",
+    description:
+      "Assess candidates for domain knowledge, enterprise software experience, customer-facing ability and practical alignment with the role.",
+  },
+  {
+    number: "04",
+    icon: MessagesSquare,
+    title: "Manage and Refine",
+    description:
+      "Maintain candidate engagement, collect interview feedback and continuously refine the search around real hiring-team decisions.",
+  },
+];
+
+export default function RecruitingProcess() {
   return (
-    <section className="py-20 px-4 bg-white text-black">
-      <div className="max-w-7xl mx-auto">
-        <motion.div 
+    <section
+      id="process"
+      className="py-24 bg-gradient-to-b from-white to-gray-50"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6 }}
           className="text-center mb-16"
-          initial={{ y: 50, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-4xl mb-4 text-black font-bold">Technology Stack</h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Powered by cutting-edge technologies that enable intelligent recruiting and seamless user experiences
+          <p className="text-sm font-semibold uppercase tracking-widest text-clay-700 mb-3">
+            Our Process
+          </p>
+
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-5">
+            Built for Complex R&amp;D Searches
+          </h2>
+
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            A focused search process designed for roles requiring scientific
+            credibility, technical depth and strong customer communication.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-5 gap-8">
-          {technologies.map((tech, index) => (
-            <motion.div
-              key={tech.name}
-              initial={{ y: 50, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="group"
-            >
-              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 hover:bg-gray-100 transition-all duration-300 h-full flex flex-col">
-                <motion.div
-                  className="w-16 h-16 mx-auto mb-4 flex items-center justify-center"
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <Image 
-                    src={tech.src} 
-                    alt={tech.name}
-                    width={50}
-                    height={50}
-                    className="object-contain"
-                  />
-                </motion.div>
-                
-                <div className="text-center flex-1 flex flex-col">
-                  <div 
-                    className="inline-block px-2 py-1 rounded-full text-xs font-medium mb-3 self-center"
-                    style={{ 
-                      backgroundColor: '#4A484420',
-                      color: '#3D3A37'
-                    }}
-                  >
-                    {tech.category}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {processSteps.map((step, index) => {
+            const Icon = step.icon;
+
+            return (
+              <motion.article
+                key={step.number}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.1,
+                }}
+                whileHover={{ y: -6 }}
+                className="relative h-full bg-white border border-gray-200 rounded-2xl p-7 shadow-sm hover:shadow-xl transition-all duration-300"
+              >
+                <div className="flex items-start justify-between mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-br from-clay-100 to-clay-200 rounded-xl flex items-center justify-center">
+                    <Icon
+                      className="w-6 h-6 text-clay-800"
+                      aria-hidden="true"
+                    />
                   </div>
-                  
-                  <h3 className="text-lg font-semibold mb-3 text-black">{tech.name}</h3>
-                  
-                  <p className="text-gray-600 text-sm leading-relaxed flex-1">
-                    {tech.description}
-                  </p>
+
+                  <span className="text-3xl font-bold text-gray-200">
+                    {step.number}
+                  </span>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  {step.title}
+                </h3>
+
+                <p className="text-gray-600 leading-relaxed">
+                  {step.description}
+                </p>
+              </motion.article>
+            );
+          })}
         </div>
 
-        <motion.div 
-          className="text-center mt-12"
-          initial={{ y: 30, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ delay: 0.35, duration: 0.5 }}
+          className="text-center mt-12"
         >
-          <p className="text-gray-500 text-sm">
-            Built with modern, scalable technologies to deliver exceptional recruiting experiences
-          </p>
+          <a
+            href="#contact"
+            className="inline-flex items-center justify-center bg-clay-900 text-white px-7 py-3.5 rounded-full font-medium hover:bg-clay-800 transition-colors"
+          >
+            Discuss Your Hiring Challenge
+          </a>
         </motion.div>
       </div>
     </section>

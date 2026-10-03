@@ -1,261 +1,489 @@
 // app/api/contact/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { Client } from '@microsoft/microsoft-graph-client';
-import { ClientSecretCredential } from '@azure/identity';
 
-// Import fetch for Node.js environment
-import 'isomorphic-fetch';
+import { NextRequest, NextResponse } from "next/server";
+import { Client } from "@microsoft/microsoft-graph-client";
+import { ClientSecretCredential } from "@azure/identity";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+const ROLE_DESCRIPTIONS = {
+  "solutions-engineering": "Solutions Engineering",
+  "scientific-implementation": "Scientific Implementation",
+  "technical-consulting": "Technical Consulting",
+  "customer-success": "Technical Customer Success",
+  "rd-software": "R&D Software Engineering",
+  "scientific-data-ai": "Scientific Data or AI",
+  "plm-lab-informatics": "PLM or Lab Informatics",
+  "other-specialized-role": "Other Specialized Role",
+} as const;
+
+type RoleValue = keyof typeof ROLE_DESCRIPTIONS;
+
+type ContactRequestBody = {
+  name?: unknown;
+  email?: unknown;
+  company?: unknown;
+  role?: unknown;
+  message?: unknown;
+  website?: unknown;
+};
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, company, role, message } = await request.json();
+    let body: ContactRequestBody;
 
-    // Validate required fields
-    if (!name || !email || !company || !role || !message) {
+    try {
+      body = (await request.json()) as ContactRequestBody;
+    } catch {
       return NextResponse.json(
-        { error: 'All fields are required' },
+        { error: "Invalid request body." },
         { status: 400 }
       );
     }
 
-    // Create credentials using Azure Identity
-    const credential = new ClientSecretCredential(
-      process.env.AZURE_TENANT_ID!,
-      process.env.AZURE_CLIENT_ID!,
-      process.env.AZURE_CLIENT_SECRET!
-    );
-
-    // Get access token
-    const tokenResponse = await credential.getToken('https://graph.microsoft.com/.default');
-    
-    if (!tokenResponse) {
-      throw new Error('Failed to obtain access token');
+    /*
+     * Optional honeypot field.
+     * If you later add a hidden "website" input to the form, bots that fill it
+     * will receive a successful response without triggering an email.
+     */
+    if (
+      typeof body.website === "string" &&
+      body.website.trim().length > 0
+    ) {
+      return NextResponse.json(
+        { message: "Enquiry received." },
+        { status: 200 }
+      );
     }
 
-    // Create Graph client
-    const client = Client.init({
+    const name = normalizeSingleLine(body.name);
+    const email = normalizeSingleLine(body.email).toLowerCase();
+    const company = normalizeSingleLine(body.company);
+    const role = normalizeSingleLine(body.role);
+    const message = normalizeMultiline(body.message);
+
+    if (!name || !email || !company || !role || !message) {
+      return NextResponse.json(
+        { error: "All fields are required." },
+        { status: 400 }
+      );
+    }
+
+    if (
+      name.length > 100 ||
+      email.length > 254 ||
+      company.length > 150 ||
+      role.length > 80 ||
+      message.length > 5000
+    ) {
+      return NextResponse.json(
+        { error: "One or more fields exceed the allowed length." },
+        { status: 400 }
+      );
+    }
+
+    if (!isValidEmail(email)) {
+      return NextResponse.json(
+        { error: "Please enter a valid email address." },
+        { status: 400 }
+      );
+    }
+
+    if (!isValidRole(role)) {
+      return NextResponse.json(
+        { error: "Please select a valid role category." },
+        { status: 400 }
+      );
+    }
+
+    const tenantId = process.env.AZURE_TENANT_ID;
+    const clientId = process.env.AZURE_CLIENT_ID;
+    const clientSecret = process.env.AZURE_CLIENT_SECRET;
+
+    const senderEmail =
+      process.env.CONTACT_SENDER_EMAIL || "umar@gritliy.com";
+
+    const recipientEmail =
+      process.env.CONTACT_RECIPIENT_EMAIL || "umar@gritliy.com";
+
+    if (!tenantId || !clientId || !clientSecret) {
+      console.error(
+        "Contact route configuration error: missing Azure credentials."
+      );
+
+      return NextResponse.json(
+        { error: "The contact service is temporarily unavailable." },
+        { status: 500 }
+      );
+    }
+
+    const credential = new ClientSecretCredential(
+      tenantId,
+      clientId,
+      clientSecret
+    );
+
+    const tokenResponse = await credential.getToken(
+      "https://graph.microsoft.com/.default"
+    );
+
+    if (!tokenResponse?.token) {
+      throw new Error("Microsoft Graph access token was not obtained.");
+    }
+
+    const graphClient = Client.init({
       authProvider: (done) => {
         done(null, tokenResponse.token);
-      }
+      },
     });
 
-    // HTML templates for emails
+    const roleDescription = ROLE_DESCRIPTIONS[role];
+
+    /*
+     * Escape all user-controlled values before inserting them into HTML.
+     * This prevents contact-form submissions from injecting arbitrary markup
+     * into the emails.
+     */
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safeCompany = escapeHtml(company);
+    const safeRole = escapeHtml(roleDescription);
+    const safeMessage = escapeHtml(message);
+
+    const submittedAt = new Intl.DateTimeFormat("en-GB", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "Asia/Karachi",
+      timeZoneName: "short",
+    }).format(new Date());
+
     const adminEmailHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <div style="background: linear-gradient(135deg, #4A4844 0%, #2C2825 100%); padding: 30px; border-radius: 10px 10px 0 0;">
-          <h1 style="color: white; margin: 0; font-size: 24px;">GRITLIY</h1>
-          <p style="color: #E0E0E0; margin: 5px 0 0 0; font-size: 14px;">New Contact Form Submission</p>
+      <div style="font-family: Arial, Helvetica, sans-serif; max-width: 640px; margin: 0 auto; color: #252525;">
+        <div style="background: linear-gradient(135deg, #4A4844 0%, #2C2825 100%); padding: 30px; border-radius: 12px 12px 0 0;">
+          <h1 style="color: #ffffff; margin: 0; font-size: 26px;">
+            GRITLIY
+          </h1>
+
+          <p style="color: #e5e5e5; margin: 8px 0 0; font-size: 14px;">
+            New R&amp;D software hiring enquiry
+          </p>
         </div>
-        
-        <div style="background-color: #f9f9f9; padding: 30px; border: 1px solid #e0e0e0; border-top: none;">
-          <h2 style="color: #333; margin-top: 0;">Contact Details</h2>
-          
-          <div style="background-color: white; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #e0e0e0;">
+
+        <div style="background-color: #f8f8f8; padding: 30px; border: 1px solid #e2e2e2; border-top: none;">
+          <h2 style="color: #252525; margin: 0 0 20px;">
+            Search details
+          </h2>
+
+          <div style="background-color: #ffffff; padding: 22px; border-radius: 10px; border: 1px solid #e2e2e2;">
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
-                <td style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;"><strong style="color: #4A4844;">Name:</strong></td>
-                <td style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;">${name}</td>
+                <td style="width: 145px; padding: 10px 0; border-bottom: 1px solid #eeeeee;">
+                  <strong>Name</strong>
+                </td>
+
+                <td style="padding: 10px 0; border-bottom: 1px solid #eeeeee;">
+                  ${safeName}
+                </td>
               </tr>
+
               <tr>
-                <td style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;"><strong style="color: #4A4844;">Email:</strong></td>
-                <td style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;"><a href="mailto:${email}" style="color: #4A4844;">${email}</a></td>
+                <td style="padding: 10px 0; border-bottom: 1px solid #eeeeee;">
+                  <strong>Email</strong>
+                </td>
+
+                <td style="padding: 10px 0; border-bottom: 1px solid #eeeeee;">
+                  <a href="mailto:${safeEmail}" style="color: #4A4844;">
+                    ${safeEmail}
+                  </a>
+                </td>
               </tr>
+
               <tr>
-                <td style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;"><strong style="color: #4A4844;">Company:</strong></td>
-                <td style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;">${company}</td>
+                <td style="padding: 10px 0; border-bottom: 1px solid #eeeeee;">
+                  <strong>Company</strong>
+                </td>
+
+                <td style="padding: 10px 0; border-bottom: 1px solid #eeeeee;">
+                  ${safeCompany}
+                </td>
               </tr>
+
               <tr>
-                <td style="padding: 10px 0;"><strong style="color: #4A4844;">Role Type:</strong></td>
-                <td style="padding: 10px 0;">${getRoleDescription(role)}</td>
+                <td style="padding: 10px 0;">
+                  <strong>Hiring for</strong>
+                </td>
+
+                <td style="padding: 10px 0;">
+                  ${safeRole}
+                </td>
               </tr>
             </table>
           </div>
-          
-          <div style="background-color: white; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #e0e0e0;">
-            <h3 style="color: #4A4844; margin-top: 0;">Message:</h3>
-            <p style="color: #333; line-height: 1.6; white-space: pre-wrap;">${message}</p>
+
+          <div style="background-color: #ffffff; padding: 22px; border-radius: 10px; margin-top: 20px; border: 1px solid #e2e2e2;">
+            <h3 style="color: #4A4844; margin: 0 0 12px;">
+              Hiring requirements
+            </h3>
+
+            <p style="color: #333333; line-height: 1.7; white-space: pre-wrap; margin: 0;">
+              ${safeMessage}
+            </p>
           </div>
-          
-          <div style="text-align: center; margin-top: 30px;">
-            <a href="mailto:${email}" style="display: inline-block; padding: 12px 30px; background-color: #4A4844; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Reply to ${name}</a>
+
+          <div style="text-align: center; margin-top: 28px;">
+            <a
+              href="mailto:${safeEmail}"
+              style="display: inline-block; padding: 13px 28px; background-color: #4A4844; color: #ffffff; text-decoration: none; border-radius: 999px; font-weight: bold;"
+            >
+              Reply to ${safeName}
+            </a>
           </div>
         </div>
-        
-        <div style="background-color: #f0f0f0; padding: 20px; text-align: center; border-radius: 0 0 10px 10px;">
-          <p style="color: #666; font-size: 12px; margin: 0;">
-            Sent from GRITLIY contact form on ${new Date().toLocaleString('en-US', { timeZone: 'America/Denver' })} MST
+
+        <div style="background-color: #eeeeee; padding: 18px; text-align: center; border-radius: 0 0 12px 12px;">
+          <p style="color: #666666; font-size: 12px; margin: 0;">
+            Submitted through gritliy.com on ${submittedAt}
           </p>
         </div>
       </div>
     `;
 
     const autoReplyHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <div style="background: linear-gradient(135deg, #4A4844 0%, #2C2825 100%); padding: 40px; text-align: center; border-radius: 10px 10px 0 0;">
-          <h1 style="color: white; margin: 0; font-size: 32px; letter-spacing: 2px;">GRITLIY</h1>
-          <p style="color: #E0E0E0; margin: 10px 0 0 0; font-size: 14px;">Engineering Excellence. One Visionary Hire at a Time.</p>
-        </div>
-        
-        <div style="background-color: white; padding: 40px; border: 1px solid #e0e0e0; border-top: none;">
-          <h2 style="color: #333; margin-top: 0;">Thank you for reaching out, ${name}!</h2>
-          
-          <p style="line-height: 1.8; color: #555; font-size: 16px;">
-            I appreciate your interest in GRITLIY's AI-powered recruiting services for 
-            <strong style="color: #4A4844;">${getRoleDescription(role)}</strong> roles at 
-            <strong style="color: #4A4844;">${company}</strong>.
+      <div style="font-family: Arial, Helvetica, sans-serif; max-width: 640px; margin: 0 auto; color: #252525;">
+        <div style="background: linear-gradient(135deg, #4A4844 0%, #2C2825 100%); padding: 38px; text-align: center; border-radius: 12px 12px 0 0;">
+          <h1 style="color: #ffffff; margin: 0; font-size: 30px; letter-spacing: 1px;">
+            GRITLIY
+          </h1>
+
+          <p style="color: #e5e5e5; margin: 10px 0 0; font-size: 14px;">
+            Specialist recruiting for R&amp;D software companies
           </p>
-          
-          <div style="background: linear-gradient(135deg, #f9f9f9 0%, #f5f5f5 100%); padding: 25px; border-radius: 8px; margin: 30px 0; border-left: 4px solid #4A4844;">
-            <h3 style="color: #4A4844; margin-top: 0;">What happens next?</h3>
-            <ul style="color: #666; line-height: 2; padding-left: 20px;">
-              <li>I'll review your requirements within <strong>24 hours</strong></li>
-              <li>I'll reach out to schedule a <strong>consultation call</strong></li>
-              <li>We'll discuss how our <strong>RecruitFlow AI</strong> system can transform your hiring process</li>
-              <li>I'll provide a <strong>customized talent acquisition strategy</strong> for your needs</li>
+        </div>
+
+        <div style="background-color: #ffffff; padding: 38px; border: 1px solid #e2e2e2; border-top: none;">
+          <h2 style="color: #252525; margin: 0 0 20px;">
+            Thank you for reaching out, ${safeName}.
+          </h2>
+
+          <p style="line-height: 1.8; color: #555555; font-size: 16px;">
+            Your enquiry regarding
+            <strong style="color: #4A4844;">${safeRole}</strong>
+            hiring at
+            <strong style="color: #4A4844;">${safeCompany}</strong>
+            has been received.
+          </p>
+
+          <div style="background-color: #f7f7f7; padding: 24px; border-radius: 10px; margin: 28px 0; border-left: 4px solid #4A4844;">
+            <h3 style="color: #4A4844; margin: 0 0 14px;">
+              What happens next?
+            </h3>
+
+            <ul style="color: #555555; line-height: 1.9; padding-left: 20px; margin-bottom: 0;">
+              <li>Umar will review the role and search requirements.</li>
+              <li>The scientific, technical and customer-facing profile will be assessed.</li>
+              <li>If the search is aligned, Umar will contact you directly to arrange an initial discussion.</li>
             </ul>
           </div>
-          
-          <div style="background-color: #4A4844; color: white; padding: 25px; border-radius: 8px; margin: 30px 0;">
-            <h3 style="margin-top: 0; color: white;">Why GRITLIY?</h3>
-            <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px;">
-              <div style="flex: 1; min-width: 200px;">
-                <div style="font-size: 28px; font-weight: bold;">95%</div>
-                <div style="font-size: 14px; opacity: 0.9;">Success Rate</div>
-              </div>
-              <div style="flex: 1; min-width: 200px;">
-                <div style="font-size: 28px; font-weight: bold;">89%</div>
-                <div style="font-size: 14px; opacity: 0.9;">Retention Rate</div>
-              </div>
-              <div style="flex: 1; min-width: 200px;">
-                <div style="font-size: 28px; font-weight: bold;">100+</div>
-                <div style="font-size: 14px; opacity: 0.9;">Hard-to-fill roles</div>
-              </div>
-            </div>
-          </div>
-          
-          <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 30px 0;">
-            <p style="color: #555; margin: 0 0 15px 0; font-weight: bold;">In the meantime, feel free to:</p>
-            <ul style="line-height: 1.8; color: #666;">
-              <li>Connect with me on <a href="https://www.linkedin.com/in/umaraftab/" style="color: #4A4844; font-weight: bold;">LinkedIn</a></li>
-              <li>Visit our website: <a href="https://gritliy.com" style="color: #4A4844; font-weight: bold;">gritliy.com</a></li>
-              <li>Schedule a call directly: <a href="mailto:umar@gritliy.com" style="color: #4A4844; font-weight: bold;">umar@gritliy.com</a></li>
-            </ul>
+
+          <p style="line-height: 1.8; color: #555555; font-size: 16px;">
+            In the meantime, you can reply directly to this email if you would
+            like to add the job description, compensation range, location or
+            hiring timeline.
+          </p>
+
+          <div style="margin-top: 30px; padding-top: 24px; border-top: 1px solid #e5e5e5;">
+            <p style="color: #555555; font-size: 14px; line-height: 1.7; margin: 0;">
+              <strong style="color: #252525;">Umar Aftab</strong><br />
+              Founder | Software Engineer &amp; Technical Recruiter<br />
+              GRITLIY<br />
+              <a
+                href="mailto:${escapeHtml(senderEmail)}"
+                style="color: #4A4844;"
+              >
+                ${escapeHtml(senderEmail)}
+              </a>
+              &nbsp;|&nbsp;
+              <a
+                href="https://www.linkedin.com/in/umaraftab/"
+                style="color: #4A4844;"
+              >
+                LinkedIn
+              </a>
+            </p>
           </div>
         </div>
-        
-        <div style="background-color: #f0f0f0; padding: 30px; border-radius: 0 0 10px 10px;">
-          <table style="width: 100%;">
-            <tr>
-              <td style="text-align: left;">
-                <p style="color: #666; font-size: 14px; line-height: 1.6; margin: 0;">
-                  <strong>Umar Aftab</strong><br>
-                  Founder & Technical Recruiter<br>
-                  GRITLIY<br>
-                  Calgary, Alberta
-                </p>
-              </td>
-              <td style="text-align: right; vertical-align: top;">
-                <p style="color: #666; font-size: 14px; margin: 0;">
-                  <a href="https://www.linkedin.com/in/umaraftab/" style="color: #4A4844;">LinkedIn</a> | 
-                  <a href="mailto:umar@gritliy.com" style="color: #4A4844;">Email</a>
-                </p>
-              </td>
-            </tr>
-          </table>
+
+        <div style="background-color: #eeeeee; padding: 18px; text-align: center; border-radius: 0 0 12px 12px;">
+          <p style="color: #777777; font-size: 12px; margin: 0;">
+            You received this message because an enquiry was submitted using
+            your email address on gritliy.com.
+          </p>
         </div>
       </div>
     `;
 
-    // Send email to admin (Nadeem)
+    const safeSubjectName = name
+      .replace(/[\r\n]+/g, " ")
+      .slice(0, 80);
+
+    const safeSubjectCompany = company
+      .replace(/[\r\n]+/g, " ")
+      .slice(0, 100);
+
+    const graphSenderPath = encodeURIComponent(senderEmail);
+
     const adminEmail = {
       message: {
-        subject: `New Contact Form Submission from ${name} - ${company}`,
+        subject: `New R&D hiring enquiry: ${safeSubjectCompany} — ${safeSubjectName}`,
         body: {
-          contentType: 'HTML',
-          content: adminEmailHtml
+          contentType: "HTML",
+          content: adminEmailHtml,
         },
         toRecipients: [
           {
             emailAddress: {
-              address: 'umar@gritliy.com'
-            }
-          }
+              address: recipientEmail,
+            },
+          },
         ],
         replyTo: [
           {
             emailAddress: {
               address: email,
-              name: name
-            }
-          }
-        ]
+              name,
+            },
+          },
+        ],
       },
-      saveToSentItems: true
+      saveToSentItems: true,
     };
 
-    // Send auto-reply to the form submitter
+    /*
+     * When using /users/{sender}/sendMail, Microsoft Graph already knows the
+     * sender. A separate "from" property is unnecessary and can cause errors
+     * with some application-permission configurations.
+     */
     const autoReplyEmail = {
       message: {
-        subject: 'Thank you for contacting GRITLIY - We\'ll be in touch soon!',
+        subject: "We received your hiring enquiry | GRITLIY",
         body: {
-          contentType: 'HTML',
-          content: autoReplyHtml
+          contentType: "HTML",
+          content: autoReplyHtml,
         },
         toRecipients: [
           {
             emailAddress: {
               address: email,
-              name: name
-            }
-          }
+              name,
+            },
+          },
         ],
-        from: {
-          emailAddress: {
-            address: 'umar@gritliy.com',
-            name: 'Umar Aftab - GRITLIY'
-          }
-        }
+        replyTo: [
+          {
+            emailAddress: {
+              address: senderEmail,
+              name: "Umar Aftab — GRITLIY",
+            },
+          },
+        ],
       },
-      saveToSentItems: false
+      saveToSentItems: true,
     };
 
-    // Send both emails using Microsoft Graph
-    await client.api('/users/umar@gritliy.com/sendMail').post(adminEmail);
-    await client.api('/users/umar@gritliy.com/sendMail').post(autoReplyEmail);
+    /*
+     * Send the internal notification first. If that succeeds but the optional
+     * acknowledgement fails, preserve the enquiry and still return success.
+     */
+    await graphClient
+      .api(`/users/${graphSenderPath}/sendMail`)
+      .post(adminEmail);
+
+    try {
+      await graphClient
+        .api(`/users/${graphSenderPath}/sendMail`)
+        .post(autoReplyEmail);
+    } catch (autoReplyError) {
+      console.error(
+        "Contact enquiry was received, but the auto-reply failed:",
+        autoReplyError
+      );
+    }
 
     return NextResponse.json(
-      { message: 'Email sent successfully' },
+      { message: "Enquiry sent successfully." },
       { status: 200 }
     );
   } catch (error) {
-    console.error('Error sending email:', error);
-    
-    // Log more details in development
-    if (process.env.NODE_ENV === 'development') {
-        const errorDetails = error as { message?: string; code?: string; statusCode?: number; requestId?: string };
-        console.error('Error details:', {
-        message: errorDetails.message,
-        code: errorDetails.code,
-        statusCode: errorDetails.statusCode,
-        requestId: errorDetails.requestId
+    console.error("Contact email error:", error);
+
+    if (process.env.NODE_ENV === "development") {
+      const details = error as {
+        message?: string;
+        code?: string;
+        statusCode?: number;
+        requestId?: string;
+      };
+
+      console.error("Microsoft Graph error details:", {
+        message: details.message,
+        code: details.code,
+        statusCode: details.statusCode,
+        requestId: details.requestId,
       });
     }
-    
+
     return NextResponse.json(
-      { error: 'Failed to send email. Please try again later.' },
+      {
+        error:
+          "Your enquiry could not be sent. Please email umar@gritliy.com directly.",
+      },
       { status: 500 }
     );
   }
 }
 
-function getRoleDescription(role: string): string {
-  const roleMap: { [key: string]: string } = {
-    'deep': 'Deep Technology',
-    'ai': 'AI Hardware & Semi-conductors',
-    'neuro': 'NeuroTech',
-    'robotics': 'Autonomous & Robotics',
-    'space': 'Space Research & Technology',
-    'other': 'Other Technical Roles'
+function normalizeSingleLine(value: unknown): string {
+  if (typeof value !== "string") {
+    return "";
+  }
+
+  return value.replace(/\s+/g, " ").trim();
+}
+
+function normalizeMultiline(value: unknown): string {
+  if (typeof value !== "string") {
+    return "";
+  }
+
+  return value.trim();
+}
+
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function isValidRole(role: string): role is RoleValue {
+  return Object.prototype.hasOwnProperty.call(
+    ROLE_DESCRIPTIONS,
+    role
+  );
+}
+
+function escapeHtml(value: string): string {
+  const replacements: Record<string, string> = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
   };
-  return roleMap[role] || role;
+
+  return value.replace(
+    /[&<>"']/g,
+    (character) => replacements[character]
+  );
 }
